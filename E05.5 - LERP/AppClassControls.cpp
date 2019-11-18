@@ -86,7 +86,7 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 	{
 	default: break;
 	case sf::Keyboard::Escape:
-		m_bRunning = false;
+		//m_bRunning = false;
 		break;
 	case sf::Keyboard::F1:
 		m_pCameraMngr->SetCameraMode(CAM_PERSP);
@@ -377,8 +377,10 @@ void Application::CameraRotation(float a_fSpeed)
 		fAngleX += fDeltaMouse * a_fSpeed;
 	}
 	//Change the Yaw and the Pitch of the camera
-	m_pCameraMngr->ChangeYaw(fAngleY * 0.25f);
-	m_pCameraMngr->ChangePitch(-fAngleX * 0.25f);
+	if (!inMenu) {
+		m_pCameraMngr->ChangeYaw(fAngleY * 0.25f);
+		m_pCameraMngr->ChangePitch(-fAngleX * 0.25f);
+	}
 	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
 }
 //Keyboard
@@ -396,24 +398,33 @@ void Application::ProcessKeyboard(void)
 	if (fMultiplier)
 		fSpeed *= 5.0f;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		m_pCameraMngr->MoveForward(fSpeed);
+	if (!inMenu) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			m_pCameraMngr->MoveForward(fSpeed);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		m_pCameraMngr->MoveForward(-fSpeed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			m_pCameraMngr->MoveForward(-fSpeed);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		m_pCameraMngr->MoveSideways(-fSpeed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			m_pCameraMngr->MoveSideways(-fSpeed);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		m_pCameraMngr->MoveSideways(fSpeed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			m_pCameraMngr->MoveSideways(fSpeed);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		m_pCameraMngr->MoveVertical(-fSpeed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+			m_pCameraMngr->MoveVertical(-fSpeed);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-		m_pCameraMngr->MoveVertical(fSpeed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+			m_pCameraMngr->MoveVertical(fSpeed);
+	}
 #pragma endregion
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && inMenu) {
+		transitioning = true;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+		inMenu = true;
+	}
 }
 //Joystick
 void Application::ProcessJoystick(void)

@@ -23,6 +23,7 @@ class SimplexDLL LightManager
 	std::vector<Light*> m_lLight; //vector of lights
 
 public:
+	
 	//Public Accessors
 	/*
 	USAGE: Gets/Constructs the singleton pointer
@@ -96,6 +97,7 @@ public:
 	OUTPUT: light intensity
 	*/
 	float GetIntensity(uint a_nLightIndex = 1);
+
 
 private:
 	/*

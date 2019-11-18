@@ -6,14 +6,16 @@ Date: 2017/05
 #define __APPLICATIONCLASS_H_
 
 #include "Definitions.h"
+#include "SceneObj.h"
+#include "PoolBall.h"
 
 #include "ControllerConfiguration.h"
 #include "imgui\ImGuiObject.h"
 
 class Application
 {
-	String m_sProgrammer = "";
-	Simplex::Model* m_pModel = nullptr;
+	String m_sProgrammer = "Joel White - jxw5738@rit.edu";
+
 private:
 	static ImGuiObject gui; //GUI object
 	
@@ -35,6 +37,25 @@ private:
 	CameraManager* m_pCameraMngr = nullptr; //Singleton for the camera manager
 	ControllerInput* m_pController[8]; //Controller
 	uint m_uActCont = 0; //Active Controller of the Application
+
+
+	//lights
+	bool showLights = false;
+	int lightCount = 1;
+
+	//menu
+	float perc = 0.0f;
+	float cameraSpeed = .01f;
+	bool inMenu = true;
+	bool transitioning = false;
+	vector3 menuPos = vector3(2,1,-5);
+	vector3 tablePos = vector3(0, 0, -1);
+
+	//balls
+	PoolBall* ball_1 = nullptr;
+
+	//Models
+	SceneObj* table = nullptr;
 
 public:
 #pragma region Constructor / Run / Destructor

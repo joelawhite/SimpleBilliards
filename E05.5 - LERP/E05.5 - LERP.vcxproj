@@ -49,7 +49,7 @@
     <LibraryPath>$(SolutionDir)include\GL\lib;$(SolutionDir)include\Simplex\lib;$(SolutionDir)include\BasicX\lib;$(SolutionDir)include\SFML\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)Z_DELETE\</OutDir>
+    <OutDir>$(SolutionDir)_Binary</OutDir>
     <IntDir>$(SolutionDir)Z_DELETE\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
     <ExecutablePath>$(SolutionDir)include\GL\bin;$(SolutionDir)include\Simplex\bin;$(SolutionDir)include\BasicX\bin;$(SolutionDir)include\SFML\bin;$(ExecutablePath)</ExecutablePath>
@@ -67,6 +67,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glu32.lib;glew32.lib;opengl32.lib;simplex_d.lib;basicx_d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)_Binary\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Command>
@@ -89,6 +90,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>glu32.lib;glew32.lib;opengl32.lib;simplex.lib;basicx.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)_Binary\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
@@ -107,6 +109,8 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClCompile Include="AppClassMain.cpp" />
     <ClCompile Include="ControllerConfiguration.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PoolBall.cpp" />
+    <ClCompile Include="SceneObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\imgui\imconfig.h" />
@@ -118,6 +122,8 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClInclude Include="ControllerConfiguration.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="PoolBall.h" />
+    <ClInclude Include="SceneObj.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\res\BTO.rc" />
