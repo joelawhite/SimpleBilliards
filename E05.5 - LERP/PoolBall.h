@@ -12,6 +12,7 @@ class PoolBall
 	bool isCueBall = false;
 	float shootAngle;
 	vector3 velocity;
+	float friction = 0.000f;
 
 public:
 	PoolBall(const char* p_path);

@@ -5,14 +5,16 @@ void Application::InitVariables(void)
 	m_pCameraMngr->SetPositionTargetAndUpward(menuPos, vector3(0, -1, 0), AXIS_Y);
 
 
+
 	//balls
 	ball_1 = new PoolBall("Planets\\03_Earth.obj");
-	ball_1->SetPosRotScale(vector3(), vector3(), vector3(.1f));
+	ball_1->SetPosRotScale(vector3(0,-0.9,0), vector3(), vector3(.1f));
+	
 
 
 	//models
 	table = new SceneObj("PoolTable\\PoolTable.obj");
-	table->SetPosRotScale(vector3(0, -1, 0), vector3(), vector3(1));
+	table->SetPosRotScale(vector3(0, -1, 0), vector3(0.0f), vector3(2.0f));
 
 
 
@@ -21,7 +23,7 @@ void Application::InitVariables(void)
 	showLights = true;
 	m_pLightMngr = LightManager::GetInstance();
 	
-	m_pLightMngr->SetPosition(vector3(0, -.9f, 0), 1);
+	m_pLightMngr->SetPosition(vector3(0, 5.0f, 0), 1);
 	m_pLightMngr->SetIntensity(5, 1);
 	lightCount++;
 	
@@ -75,11 +77,21 @@ void Application::Display(void)
 	//models
 	table->Draw();
 	
+	//hole positions
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(0.0f, -0.95, -1.25f)) * glm::scale(vector3(.25f)), C_YELLOW);
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(0.0f, -0.95, 1.25f)) * glm::scale(vector3(.25f)), C_YELLOW);
+	
 
+	//show table bounds
+	/*
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(-1.109f, -1, -1.12f)) * glm::scale(vector3(1.935f, 0.2f, 0.0f)), C_YELLOW);
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(1.109f, -1, -1.12f)) * glm::scale(vector3(1.935f, 0.2f, 0.0f)), C_YELLOW);
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(-1.109f, -1, 1.12f)) * glm::scale(vector3(1.935f, 0.2f, 0.0f)), C_YELLOW);
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(1.109f, -1, 1.12f)) * glm::scale(vector3(1.935f, 0.2f, 0.0f)), C_YELLOW);
 
-
-
-
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(2.237f, -1, 0.0f)) * glm::scale(vector3(0.0f, 0.2f, 1.91f)), C_YELLOW);
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(-2.237f, -1, 0.0f)) * glm::scale(vector3(0.0f, 0.2f, 1.91f)), C_YELLOW);
+	*/
 
 
 	// draw a skybox

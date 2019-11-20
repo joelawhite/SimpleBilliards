@@ -31,16 +31,29 @@ PoolBall& PoolBall::operator=(PoolBall& other)
 
 void PoolBall::PhysicsUpdate()
 {
+	float pocketWidth = .8f;
+	bool insidePocket = false;
+
+	if (position.x < pocketWidth / 2.0f && position.x > -pocketWidth / 2.0f) {
+		insidePocket = true;
+	}
+	
 	if (position.x > 1 || position.x < -1) {
 		velocity.x *= -1;
 	}
-	if (position.z > 1 || position.z < -1) {
+	if ((position.z > 1 || position.z < -1) && !insidePocket) {
 		velocity.z *= -1;
 	}
 
+	
+
+	
+
+	
+
 
 	//drag
-	velocity *= .998f;
+	velocity *= 1.0f - friction;
 
 	velocity.y = 0;
 	position += velocity;

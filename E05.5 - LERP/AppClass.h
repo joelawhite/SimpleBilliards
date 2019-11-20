@@ -46,7 +46,7 @@ private:
 	//menu
 	float perc = 0.0f;
 	float cameraSpeed = .01f;
-	bool inMenu = true;
+	bool inMenu = false;
 	bool transitioning = false;
 	vector3 menuPos = vector3(2,1,-5);
 	vector3 tablePos = vector3(0, 0, -1);
