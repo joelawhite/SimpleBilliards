@@ -21,7 +21,8 @@ public:
 	PoolBall& operator=(PoolBall& other);
 
 	void PhysicsUpdate();
-	void Draw();
+	void Draw(MeshManager* mngr);
 	void SetPosRotScale(vector3 p_position, vector3 p_rotation, vector3 p_scale);
+	void Shoot();
 };
 

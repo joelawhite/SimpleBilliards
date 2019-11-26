@@ -72,14 +72,40 @@ void Application::Display(void)
 	}
 
 	//balls
-	ball_1->Draw();
+	ball_1->Draw(m_pMeshMngr);
 
 	//models
 	table->Draw();
-	
+
+	float radius = 0.1f;
+
+	//box1
+	float minX = 0.112f + radius;
+	float maxX = 2.07f - radius;
+	float posZ = 1.12f - radius;
+
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(minX, -1, 0)) * glm::scale(vector3(0.0f, 0.2f, 3.0f)), C_YELLOW);
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(maxX, -1, 0)) * glm::scale(vector3(0.0f, 0.2f, 3.0f)), C_YELLOW);
+
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(-minX, -1, 0)) * glm::scale(vector3(0.0f, 0.2f, 3.0f)), C_YELLOW);
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(-maxX, -1, 0)) * glm::scale(vector3(0.0f, 0.2f, 3.0f)), C_YELLOW);
+
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(0, -1, posZ)) * glm::scale(vector3(5.0f, 0.2f, 0.0f)), C_YELLOW);
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(0, -1, -posZ)) * glm::scale(vector3(5.0f, 0.2f, 0.0f)), C_YELLOW);
+
+	float posX = 2.24f - radius;
+	float maxZ = 0.95f - radius;
+
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(posX, -1, 0)) * glm::scale(vector3(0.0f, 0.2f, 3.0f)), C_YELLOW);
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(-posX, -1, 0)) * glm::scale(vector3(0.0f, 0.2f, 3.0f)), C_YELLOW);
+
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(0, -1, maxZ)) * glm::scale(vector3(5.0f, 0.2f, 0.0f)), C_YELLOW);
+	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(0, -1, -maxZ)) * glm::scale(vector3(5.0f, 0.2f, 0.0f)), C_YELLOW);
+
+
 	//hole positions
-	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(0.0f, -0.95, -1.25f)) * glm::scale(vector3(.25f)), C_YELLOW);
-	m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(0.0f, -0.95, 1.25f)) * glm::scale(vector3(.25f)), C_YELLOW);
+	//m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(0.0f, -0.95, -1.25f)) * glm::scale(vector3(.2f)), C_YELLOW);
+	//m_pMeshMngr->AddWireCubeToRenderList(glm::translate(vector3(0.0f, -0.95, 1.25f)) * glm::scale(vector3(.25f)), C_YELLOW);
 	
 
 	//show table bounds

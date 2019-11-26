@@ -416,6 +416,9 @@ void Application::ProcessKeyboard(void)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 			m_pCameraMngr->MoveVertical(fSpeed);
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			//m_pCameraMngr->MoveVertical(fSpeed);
 	}
 #pragma endregion
 
