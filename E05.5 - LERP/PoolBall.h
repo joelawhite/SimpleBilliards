@@ -9,12 +9,13 @@ class PoolBall
 	vector3 rotation;
 	vector3 scale;
 
-	bool isCueBall = false;
-	float shootAngle;
+	int ID = -1;
+
 	vector3 velocity;
-	float friction = 0.000f;
+	float friction = 0.004f;
 
 public:
+	bool hasCollided = false;
 	PoolBall(const char* p_path);
 	~PoolBall();
 	PoolBall(PoolBall& other);
@@ -23,6 +24,15 @@ public:
 	void PhysicsUpdate();
 	void Draw(MeshManager* mngr);
 	void SetPosRotScale(vector3 p_position, vector3 p_rotation, vector3 p_scale);
-	void Shoot();
+
+	void SetPosition(float x, float y, float z);
+	vector3 GetPosition();
+	void SetVelocity(vector3 p_v3);
+	vector3 GetVelocity();
+	void SetFriction(float n);
+
+	void SetID(int ID);
+	int GetID();
+
 };
 

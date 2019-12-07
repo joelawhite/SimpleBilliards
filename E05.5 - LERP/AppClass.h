@@ -8,6 +8,7 @@ Date: 2017/05
 #include "Definitions.h"
 #include "SceneObj.h"
 #include "PoolBall.h"
+#include "BallManager.h"
 
 #include "ControllerConfiguration.h"
 #include "imgui\ImGuiObject.h"
@@ -52,7 +53,8 @@ private:
 	vector3 tablePos = vector3(0, 0, -1);
 
 	//balls
-	PoolBall* ball_1 = nullptr;
+	//PoolBall* ball_1 = nullptr;
+	BallManager* ballManager = nullptr;
 
 	//Models
 	SceneObj* table = nullptr;

@@ -49,7 +49,7 @@
     <LibraryPath>$(SolutionDir)include\GL\lib;$(SolutionDir)include\Simplex\lib;$(SolutionDir)include\BasicX\lib;$(SolutionDir)include\SFML\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)_Binary</OutDir>
+    <OutDir>$(SolutionDir)Z_DELETE\</OutDir>
     <IntDir>$(SolutionDir)Z_DELETE\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
     <ExecutablePath>$(SolutionDir)include\GL\bin;$(SolutionDir)include\Simplex\bin;$(SolutionDir)include\BasicX\bin;$(SolutionDir)include\SFML\bin;$(ExecutablePath)</ExecutablePath>
@@ -70,10 +70,11 @@
       <OutputFile>$(SolutionDir)_Binary\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Copying Shaders...</Message>
+      <Message>Copying binary...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,9 +95,9 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Message>Copying files...</Message>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"
-xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Command>
+      <Message>Copying binary...</Message>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -112,6 +113,7 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PoolBall.cpp" />
     <ClCompile Include="SceneObj.cpp" />
+    <ClCompile Include="TableCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\imgui\imconfig.h" />
@@ -126,6 +128,7 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClInclude Include="Main.h" />
     <ClInclude Include="PoolBall.h" />
     <ClInclude Include="SceneObj.h" />
+    <ClInclude Include="TableCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\res\BTO.rc" />
