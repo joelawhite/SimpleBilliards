@@ -34,11 +34,21 @@ void Application::ProcessMousePressed(sf::Event a_event)
 }
 void Application::ProcessMouseReleased(sf::Event a_event)
 {
+	if (ballManager->getCameraMode() == 2 || ballManager->getCameraMode() == 3) {
+		return;
+	}
+
 	switch (a_event.mouseButton.button)
 	{
 	default: break;
 	case sf::Mouse::Button::Left:
 		gui.m_bMousePressed[0] = false;
+		ballManager->Shoot();
+		ballManager->SetShootStrength(0.0f);
+		//if beginning of game
+		if (gameManager->GetState() == 0) {
+			gameManager->SetState(1);
+		}
 		break;
 	case sf::Mouse::Button::Middle:
 		gui.m_bMousePressed[1] = false;
@@ -57,12 +67,11 @@ void Application::ProcessMouseScroll(sf::Event a_event)
 {
 	gui.io.MouseWheel = a_event.mouseWheelScroll.delta;
 	float fSpeed = a_event.mouseWheelScroll.delta;
-	float fMultiplier = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
 
-	if (fMultiplier)
-		fSpeed *= 2.0f;
-	m_pCameraMngr->MoveForward(-fSpeed);
+	//m_pCameraMngr->MoveForward(-fSpeed);
+	if (cameraDistance - fSpeed * 0.05f * cameraDistance < CameraMaxDistance && cameraDistance - fSpeed * 0.05f * cameraDistance > CameraMinDistance)
+		cameraDistance -= fSpeed * 0.05f * cameraDistance;
+
 }
 //Keyboard
 void Application::ProcessKeyPressed(sf::Event a_event)
@@ -70,7 +79,33 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 	switch (a_event.key.code)
 	{
 	default: break;
-	case sf::Keyboard::Space:
+	case sf::Keyboard::Space: 
+		break;
+	case sf::Keyboard::Escape:
+		if(ballManager->getCameraMode() == 2)
+			m_bRunning = false;
+		if (ballManager->getCameraMode() == 4) {
+			ballManager->SetGameSpeed(100.0f);
+			ballManager->SetCameraMode(2);
+		}
+		if (ballManager->getCameraMode() == 0 || ballManager->getCameraMode() == 1) {
+			prevMode = ballManager->getCameraMode();
+			ballManager->SetCameraMode(4);
+			ballManager->SetGameSpeed(0.0f);
+		}
+		
+		break;
+	case sf::Keyboard::Return:
+		if (ballManager->getCameraMode() == 2) { // in menu
+			ballManager->SetCameraMode(3);//start transition
+		}
+		if (ballManager->getCameraMode() == 4) {
+			ballManager->SetGameSpeed(100.0f);
+			ballManager->SetCameraMode(prevMode);
+		}
+		break;
+	case sf::Keyboard::Tilde:
+		showDebug = !showDebug;
 		break;
 	}
 	//gui
@@ -89,22 +124,23 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 		//m_bRunning = false;
 		break;
 	case sf::Keyboard::F1:
-		m_pCameraMngr->SetCameraMode(CAM_PERSP);
+		//m_pCameraMngr->SetCameraMode(CAM_PERSP);
 		break;
 	case sf::Keyboard::F2:
-		m_pCameraMngr->SetCameraMode(CAM_ORTHO_Z);
+		//m_pCameraMngr->SetCameraMode(CAM_ORTHO_Z);
 		break;
 	case sf::Keyboard::F3:
-		m_pCameraMngr->SetCameraMode(CAM_ORTHO_Y);
+		//m_pCameraMngr->SetCameraMode(CAM_ORTHO_Y);
 		break;
 	case sf::Keyboard::F4:
-		m_pCameraMngr->SetCameraMode(CAM_ORTHO_X);
+		//m_pCameraMngr->SetCameraMode(CAM_ORTHO_X);
 		break;
 	case sf::Keyboard::F:
-		bFPSControl = !bFPSControl;
-		m_pCameraMngr->SetFPS(bFPSControl);
+		//bFPSControl = !bFPSControl;
+		//m_pCameraMngr->SetFPS(bFPSControl);
 		break;
 	case sf::Keyboard::Add:
+		/*
 		++m_uActCont;
 		m_uActCont %= 8;
 		if (m_uControllerCount > 0)
@@ -116,7 +152,10 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 			}
 		}
 		break;
+		*/
+		
 	case sf::Keyboard::Subtract:
+		/*
 		--m_uActCont;
 		if (m_uActCont > 7)
 			m_uActCont = 7;
@@ -129,6 +168,7 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 					m_uActCont = 7;
 			}
 		}
+		*/
 		break;
 	}
 
@@ -311,23 +351,23 @@ void Application::ArcBall(float a_fSensitivity)
 	if (MouseX < CenterX)
 	{
 		DeltaMouse = static_cast<float>(CenterX - MouseX);
-		m_qArcBall = quaternion(vector3(0.0f, glm::radians(a_fSensitivity * DeltaMouse), 0.0f)) * m_qArcBall;
+		//m_qArcBall = quaternion(vector3(0.0f, glm::radians(a_fSensitivity * DeltaMouse), 0.0f)) * m_qArcBall;
 	}
 	else if (MouseX > CenterX)
 	{
 		DeltaMouse = static_cast<float>(MouseX - CenterX);
-		m_qArcBall = quaternion(vector3(0.0f, glm::radians(-a_fSensitivity * DeltaMouse), 0.0f)) * m_qArcBall;
+		//m_qArcBall = quaternion(vector3(0.0f, glm::radians(-a_fSensitivity * DeltaMouse), 0.0f)) * m_qArcBall;
 	}
 
 	if (MouseY < CenterY)
 	{
 		DeltaMouse = static_cast<float>(CenterY - MouseY);
-		m_qArcBall = quaternion(vector3(glm::radians(-a_fSensitivity * DeltaMouse), 0.0f, 0.0f)) * m_qArcBall;
+		//m_qArcBall = quaternion(vector3(glm::radians(-a_fSensitivity * DeltaMouse), 0.0f, 0.0f)) * m_qArcBall;
 	}
 	else if (MouseY > CenterY)
 	{
 		DeltaMouse = static_cast<float>(MouseY - CenterY);
-		m_qArcBall = quaternion(vector3(glm::radians(a_fSensitivity * DeltaMouse), 0.0f, 0.0f)) * m_qArcBall;
+		//m_qArcBall = quaternion(vector3(glm::radians(a_fSensitivity * DeltaMouse), 0.0f, 0.0f)) * m_qArcBall;
 	}
 
 	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
@@ -335,7 +375,9 @@ void Application::ArcBall(float a_fSensitivity)
 }
 void Application::CameraRotation(float a_fSpeed)
 {
-	if (m_bFPC == false)
+	//if (m_bFPC == false)
+		//return;
+	if (!m_pWindow->hasFocus() || ballManager->getCameraMode() == 4)
 		return;
 
 	UINT	MouseX, MouseY;		// Coordinates for the mouse
@@ -358,29 +400,71 @@ void Application::CameraRotation(float a_fSpeed)
 	if (MouseX < CenterX)
 	{
 		fDeltaMouse = static_cast<float>(CenterX - MouseX);
-		fAngleY += fDeltaMouse * a_fSpeed;
+		if (lastFrameMode == 4) {
+			fDeltaMouse = 0;
+		}
+		//fAngleY += fDeltaMouse * a_fSpeed;
+
+		cameraRotationH += fDeltaMouse * a_fSpeed;
 	}
 	else if (MouseX > CenterX)
 	{
 		fDeltaMouse = static_cast<float>(MouseX - CenterX);
-		fAngleY -= fDeltaMouse * a_fSpeed;
+		if (lastFrameMode == 4) {
+			fDeltaMouse = 0;
+		}
+		//fAngleY -= fDeltaMouse * a_fSpeed;
+
+		cameraRotationH -= fDeltaMouse * a_fSpeed;
 	}
 
 	if (MouseY < CenterY)
 	{
 		fDeltaMouse = static_cast<float>(CenterY - MouseY);
-		fAngleX -= fDeltaMouse * a_fSpeed;
+		if (lastFrameMode == 4) {
+			fDeltaMouse = 0;
+		}
+		//fAngleX -= fDeltaMouse * a_fSpeed;
+
+		if (ballManager->getCameraMode() == 1 && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			
+			ballManager->ChangeShootStrength(-fDeltaMouse * 0.1f);
+			if (ballManager->GetShootStrength() < 0) {
+				ballManager->SetShootStrength(0.0f);
+			}
+		}
+		else {
+			if (cameraRotationV - fDeltaMouse * a_fSpeed < glm::radians(3.0f))
+				cameraRotationV = glm::radians(3.0f);
+
+			else if (cameraRotationV > glm::radians(3.0f))
+				cameraRotationV -= fDeltaMouse * a_fSpeed;
+		}
 	}
 	else if (MouseY > CenterY)
 	{
 		fDeltaMouse = static_cast<float>(MouseY - CenterY);
-		fAngleX += fDeltaMouse * a_fSpeed;
+		if (lastFrameMode == 4) {
+			fDeltaMouse = 0;
+		}
+		//fAngleX += fDeltaMouse * a_fSpeed;
+
+		if (ballManager->getCameraMode() == 1 && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+			ballManager->ChangeShootStrength(fDeltaMouse * 0.1f);
+			if (ballManager->GetShootStrength() > maxPower) {
+				ballManager->SetShootStrength(maxPower);
+			}
+		}
+		else {
+			if (cameraRotationV + fDeltaMouse * a_fSpeed > glm::radians(89.0f))
+				cameraRotationV = glm::radians(89.0f);
+
+			else if (cameraRotationV < glm::radians(89.0f))
+				cameraRotationV += fDeltaMouse * a_fSpeed;
+		}
 	}
 	//Change the Yaw and the Pitch of the camera
-	if (!inMenu) {
-		m_pCameraMngr->ChangeYaw(fAngleY * 0.25f);
-		m_pCameraMngr->ChangePitch(-fAngleX * 0.25f);
-	}
 	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
 }
 //Keyboard
@@ -391,49 +475,115 @@ void Application::ProcessKeyboard(void)
 	for discreet on/off use ProcessKeyboardPressed/Released
 	*/
 #pragma region Camera Position
-	float fSpeed = 0.02f;
-	float fMultiplier = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
-
-	if (fMultiplier)
-		fSpeed *= 5.0f;
 
 	if (!inMenu) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-			m_pCameraMngr->MoveForward(fSpeed);
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-			m_pCameraMngr->MoveForward(-fSpeed);
+#pragma region Controls
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-			m_pCameraMngr->MoveSideways(-fSpeed);
+		if (gameManager->GetState() == 0)//game start
+		{
+			vector3 change = ZERO_V3;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-			m_pCameraMngr->MoveSideways(fSpeed);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+				change.z += deltaTime;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-			m_pCameraMngr->MoveVertical(-fSpeed);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+				change.z -= deltaTime;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-			m_pCameraMngr->MoveVertical(fSpeed);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+				change.x += deltaTime;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-			ballManager->ChangeAngle(0.1f);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+				change.x -= deltaTime;
+			
+			vector3 v3 = ZERO_V3;
+			v3.x = cos(-cameraRotationH) * change.x - sin(-cameraRotationH) * change.z;
+			v3.z = sin(-cameraRotationH) * change.x + cos(-cameraRotationH) * change.z;
+			ballManager->GetCueBall()->SetPosition(ballManager->GetCueBall()->GetPosition() - v3);
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-			ballManager->ChangeAngle(-0.1f);
+			v3 = ballManager->GetCueBall()->GetPosition();
+			if (v3.x > -1.1f) {
+				ballManager->GetCueBall()->SetPosition(-1.1f, v3.y, v3.z);
+			}
+			if (v3.x < -2.1f) {
+				ballManager->GetCueBall()->SetPosition(-2.1f, v3.y, v3.z);
+			}
+			if (v3.z > 1.0f) {
+				ballManager->GetCueBall()->SetPosition(v3.x, v3.y, 1.0f);
+			}
+			if (v3.z < -1.0f) {
+				ballManager->GetCueBall()->SetPosition(v3.x, v3.y, -1.0f);
+			}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-			ballManager->Shoot();
+		}
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			//m_pCameraMngr->MoveForward(fSpeed);
+			//if (cameraRotationV < glm::radians(89.0f))
+			//	cameraRotationV += 0.01f;
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			//m_pCameraMngr->MoveForward(-fSpeed);
+			//if (cameraRotationV > glm::radians(3.0f))
+			//	cameraRotationV -= 0.01f;
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			//m_pCameraMngr->MoveSideways(-fSpeed);
+			//cameraRotationH -= 0.01f;
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			//m_pCameraMngr->MoveSideways(fSpeed);
+			//cameraRotationH += 0.01f;
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+			//m_pCameraMngr->MoveVertical(-fSpeed);
+			//if (cameraDistance < CameraMaxDistance)
+			//	cameraDistance += 0.01f;
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+			//m_pCameraMngr->MoveVertical(fSpeed);
+			//if (cameraDistance > CameraMinDistance)
+			//	cameraDistance -= 0.01f;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+
+			if (ballManager->getCameraMode() == 0 && !isCPressed)
+				ballManager->SetCameraMode(1);
+			else if(ballManager->getCameraMode() == 1 && !isCPressed)
+				ballManager->SetCameraMode(0);
+
+			isCPressed = true;
+		}
+		else {
+			isCPressed = false;
+		}
+		
+#pragma endregion
+
+
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+			//ballManager->ChangeAngle(0.1f);
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+			//ballManager->ChangeAngle(-0.1f);
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+			//ballManager->ChangeShootStrength(0.1f);
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+			//ballManager->ChangeShootStrength(-0.1f);
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			//ballManager->Shoot();
 	}
 #pragma endregion
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && inMenu) {
-		transitioning = true;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-		inMenu = true;
-	}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && inMenu) {
+		//transitioning = true;
+	//}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+		//inMenu = true;
+	//}
 }
 //Joystick
 void Application::ProcessJoystick(void)
@@ -443,6 +593,7 @@ void Application::ProcessJoystick(void)
 	for discreet on/off use ProcessJoystickPressed/Released
 	*/
 #pragma region Camera Position
+	/*
 	float fForwardSpeed = m_pController[m_uActCont]->axis[SimplexAxis_Y] / 150.0f;
 	float fHorizontalSpeed = m_pController[m_uActCont]->axis[SimplexAxis_X] / 150.0f;
 	float fVerticalSpeed = m_pController[m_uActCont]->axis[SimplexAxis_R] / 150.0f -
@@ -479,5 +630,6 @@ void Application::ProcessJoystick(void)
 	{
 		m_qArcBall = quaternion(vector3(0.0f, glm::radians(m_pController[m_uActCont]->axis[SimplexAxis_POVX] / 20.0f), 0.0f)) * m_qArcBall;
 	}
+	*/
 #pragma endregion
 }

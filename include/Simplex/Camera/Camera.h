@@ -21,7 +21,7 @@ class SimplexDLL Camera
 	vector2 m_v2NearFar = vector2(0.001f, 1000.0f); //Near and Far planes
 
 	vector3 m_v3Position = vector3(0.0f, 0.0f, 5.0f); //Where my camera is located
-	vector3 m_v3Target = vector3(0.0f, 0.0f, 0.0f); //What the camera is looking at
+	
 	vector3 m_v3Above = vector3(0.0f, 1.0f, 0.0f); //What is above the camera position
 
 	vector3 m_v3Forward = vector3(0.0f, 0.0f, -1.0f); //Line of sight
@@ -36,6 +36,7 @@ class SimplexDLL Camera
 	bool m_bInternalCalculation = true; //use of this flag to accept other matrices instead of calculating them
 
 public:
+	vector3 m_v3Target = vector3(0.0f, 0.0f, 0.0f); //What the camera is looking at
 	/*
 	USAGE: Constructor
 	ARGUMENTS: ---
@@ -117,6 +118,7 @@ public:
 	OUTPUT: rightward vector of the camera
 	*/
 	vector3 GetRightward(void);
+
 	/*
 	USAGE:  Sets the Forward vector of the camera
 	ARGUMENTS: vector3 a_v3Input -> input vector

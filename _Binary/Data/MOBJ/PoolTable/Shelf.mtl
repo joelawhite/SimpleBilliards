@@ -1,0 +1,5 @@
+# Blender MTL File: 'PoolScene.blend'
+# Material Count: 1
+
+newmtl ShelfMat
+map_Kd Shelf_1024.png

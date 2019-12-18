@@ -9,6 +9,7 @@ Date: 2017/05
 #include "SceneObj.h"
 #include "PoolBall.h"
 #include "BallManager.h"
+#include "GameManager.h"
 
 #include "ControllerConfiguration.h"
 #include "imgui\ImGuiObject.h"
@@ -39,25 +40,60 @@ private:
 	ControllerInput* m_pController[8]; //Controller
 	uint m_uActCont = 0; //Active Controller of the Application
 
+	float deltaTime = 0.0f;
+	bool showDebug = false;
 
 	//lights
-	bool showLights = false;
 	int lightCount = 1;
+
+	//camera
+	int prevMode = 1;
+	int lastFrameMode = -1;
+	float CameraMaxDistance = 5.0f;
+	float CameraMinDistance = 0.1f;
+	float cameraRotationH = glm::radians(180.0f);
+	float cameraRotationV = 0.5f;
+	float cameraDistance = 2.0f;
+
+	float roomMaxX = 9.5f;
+	float roomMinX = -9.3f;
+	float roomMaxZ = 13.0f;
+	float roomMinZ = -9.5f;
+	float roomMaxY = 2.5f;
+	float roomMinY = -100.0f;
 
 	//menu
 	float perc = 0.0f;
 	float cameraSpeed = .01f;
+	bool isCPressed = false;
+
+	float lerpAmt = 0.0f;
 	bool inMenu = false;
 	bool transitioning = false;
-	vector3 menuPos = vector3(2,1,-5);
-	vector3 tablePos = vector3(0, 0, -1);
+	vector3 menuPos = vector3(8,1,-9);
+
+	//gamemngr
+	GameManager* gameManager = nullptr;
 
 	//balls
 	//PoolBall* ball_1 = nullptr;
 	BallManager* ballManager = nullptr;
 
 	//Models
+	vector3 scenePos = vector3(-1.33f, -2.395f, 1.425f);
+	vector3 sceneScale = vector3(0.4f);
 	SceneObj* table = nullptr;
+	SceneObj* stools = nullptr;
+	SceneObj* boothTables = nullptr;
+	SceneObj* poolLight = nullptr;
+	SceneObj* room = nullptr;
+	SceneObj* booths = nullptr;
+	SceneObj* bar = nullptr;
+	SceneObj* smallLights = nullptr;
+	SceneObj* shelf = nullptr;
+
+	//cue
+	float maxPower = 4.0f;
 
 public:
 #pragma region Constructor / Run / Destructor

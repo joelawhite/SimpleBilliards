@@ -1,0 +1,5 @@
+# Blender MTL File: 'PoolScene.blend'
+# Material Count: 1
+
+newmtl RoomMat
+map_Kd Room_4096_Denoised.png

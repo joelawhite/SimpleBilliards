@@ -1,0 +1,5 @@
+# Blender MTL File: 'PoolScene.blend'
+# Material Count: 1
+
+newmtl BoothsMat
+map_Kd Booths_2048_Denoised.png

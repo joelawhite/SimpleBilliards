@@ -21,7 +21,7 @@ namespace BasicX
 		vector2 m_v2NearFar = vector2(0.001f, 1000.0f);
 
 		vector3 m_v3Position = vector3(0.0f, 0.0f, 5.0f);
-		vector3 m_v3Target = vector3(0.0f, 0.0f, 0.0f);
+		
 		vector3 m_v3Above = vector3(0.0f, 1.0f, 0.0f);
 
 		vector3 m_v3Forward = vector3(0.0f, 0.0f, -1.0f);
@@ -36,6 +36,7 @@ namespace BasicX
 		bool m_bInternalCalculation = true;
 
 	public:
+		vector3 m_v3Target = vector3(0.0f, 0.0f, 0.0f);
 		/*
 		USAGE: Constructor
 		ARGUMENTS: ---
@@ -119,6 +120,7 @@ namespace BasicX
 		ARGUMENTS: input
 		OUTPUT: ---
 		*/
+
 		void SetForward(vector3 a_v3Input);
 		/*
 		USAGE:  Sets the Upward vector of the camera

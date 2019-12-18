@@ -19,13 +19,13 @@ public:
 	PoolBall(const char* p_path);
 	~PoolBall();
 	PoolBall(PoolBall& other);
-	PoolBall& operator=(PoolBall& other);
 
-	void PhysicsUpdate();
+	void PhysicsUpdate(float deltaTime, float gameSpeed);
 	void Draw(MeshManager* mngr);
 	void SetPosRotScale(vector3 p_position, vector3 p_rotation, vector3 p_scale);
 
 	void SetPosition(float x, float y, float z);
+	void SetPosition(vector3 p_v3);
 	vector3 GetPosition();
 	void SetVelocity(vector3 p_v3);
 	vector3 GetVelocity();

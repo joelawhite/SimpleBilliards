@@ -1,0 +1,5 @@
+# Blender MTL File: 'PoolScene.blend'
+# Material Count: 1
+
+newmtl PoolLightMat
+map_Kd PoolLight_1024_Denoised.png

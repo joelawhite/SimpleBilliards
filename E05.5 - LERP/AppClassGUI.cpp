@@ -4,15 +4,54 @@ void Application::DrawGUI(void)
 {
 #pragma region Debugging Information
 	//Print info on the screen
-	uint nEmptyLines = 20;
-	for (uint i = 0; i < nEmptyLines; ++i)
-		m_pMeshMngr->PrintLine("");//Add a line on top
-	//m_pMeshMngr->Print("						");
-	m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), C_YELLOW);
+	if (showDebug) {
+		m_pMeshMngr->Print("FPS:");
+		m_pMeshMngr->Print(std::to_string(m_pSystem->GetFPS()), C_RED);
+	}
 	
-	//m_pMeshMngr->Print("						");
-	m_pMeshMngr->Print("FPS:");
-	m_pMeshMngr->Print(std::to_string(m_pSystem->GetFPS()), C_RED);
+	//for (uint i = 0; i < 2; ++i)
+		//m_pMeshMngr->PrintLine("");//Add a line on top
+
+
+	switch (ballManager->getCameraMode()) {
+	case 0:
+		m_pMeshMngr->Print("                             Player " + std::to_string(gameManager->GetPlayerTurn())+ "'s turn", C_GREEN);
+		for (uint i = 0; i < 21; ++i)
+			m_pMeshMngr->PrintLine("");
+		m_pMeshMngr->Print(" C - Table view", C_GRAY);
+		break;
+	case 1:
+		m_pMeshMngr->Print("                             Player " + std::to_string(gameManager->GetPlayerTurn()) + "'s turn", C_GREEN);
+		for (uint i = 0; i < 21; ++i)
+			m_pMeshMngr->PrintLine("");
+		m_pMeshMngr->Print(" C - Cue ball view", C_GRAY);
+		break;
+	case 2: //menu
+		m_pMeshMngr->PrintLine("");
+		m_pMeshMngr->Print("                            SIMPLE BILLIARDS", C_BLUE);
+		for (uint i = 0; i < 15; ++i)
+			m_pMeshMngr->PrintLine("");
+		m_pMeshMngr->Print("                          Press ENTER to Start");
+		for (uint i = 0; i < 3; ++i)
+			m_pMeshMngr->PrintLine("");
+		m_pMeshMngr->Print("                               ESC - Quit");
+
+		//ImGui::Image("Cloud.png", ImVec2(10, 10));
+		break;
+	case 4:
+		m_pMeshMngr->PrintLine("");
+		m_pMeshMngr->Print("                                 PAUSED", C_RED);
+		for (uint i = 0; i < 15; ++i)
+			m_pMeshMngr->PrintLine("");
+		m_pMeshMngr->Print("                      Press ENTER to return to game");
+		for (uint i = 0; i < 3; ++i)
+			m_pMeshMngr->PrintLine("");
+		m_pMeshMngr->Print("                            ESC - Main Menu");
+		break;
+	default:
+		break;
+	}
+	
 #pragma endregion
 
 	//Calculate the window size to know how to draw
@@ -20,7 +59,9 @@ void Application::DrawGUI(void)
 
 	static ImVec4 v4Color = ImColor(255, 0, 0);
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar;
+	
 	//About
+	/*
 	{
 		ImGui::SetNextWindowPos(ImVec2(1, 1), ImGuiSetCond_FirstUseEver);
 		ImGui::SetNextWindowSize(ImVec2(340, 60), ImGuiSetCond_FirstUseEver);
@@ -96,6 +137,7 @@ void Application::DrawGUI(void)
 		}
 		ImGui::End();
 	}
+	*/
 
 	// Rendering
 	ImGui::Render();

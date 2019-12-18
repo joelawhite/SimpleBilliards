@@ -24,19 +24,14 @@ PoolBall::PoolBall(PoolBall& other)
 
 }
 
-PoolBall& PoolBall::operator=(PoolBall& other)
-{
-	// TODO: insert return statement here
-}
-
-void PoolBall::PhysicsUpdate()
+void PoolBall::PhysicsUpdate(float deltaTime, float gameSpeed)
 {
 
 	//drag
-	velocity *= 1.0f - friction;
+	velocity *= 1.0f - friction * deltaTime * gameSpeed;
 
 	//velocity.y = 0;
-	position += velocity;
+	position += velocity * deltaTime * gameSpeed;
 
 	SetPosRotScale(position, rotation, scale);
 }
@@ -84,6 +79,23 @@ void PoolBall::SetPosition(float x, float y, float z) {
 	model->SetModelMatrix(m4Model);
 }
 
+void PoolBall::SetPosition(vector3 p_v3)
+{
+	position = p_v3;
+
+	matrix4 m4Model = IDENTITY_M4;
+	m4Model = glm::translate(m4Model, position);
+
+	//m4Model = glm::rotation(vector3(), p_rotation);
+	m4Model = glm::rotate(m4Model, rotation.z, vector3(0, 0, 1));
+	m4Model = glm::rotate(m4Model, rotation.y, vector3(0, 1, 0));
+	m4Model = glm::rotate(m4Model, rotation.x, vector3(1, 0, 0));
+
+	m4Model = glm::scale(m4Model, scale);
+
+	model->SetModelMatrix(m4Model);
+}
+
 vector3 PoolBall::GetPosition()
 {
 	return position;
@@ -93,6 +105,7 @@ void PoolBall::SetVelocity(vector3 p_v3)
 {
 	velocity = p_v3;
 }
+
 
 vector3 PoolBall::GetVelocity()
 {

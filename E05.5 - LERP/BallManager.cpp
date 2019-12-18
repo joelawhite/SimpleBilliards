@@ -15,20 +15,93 @@ BallManager::BallManager(BallManager & other)
 {
 }
 
-BallManager & BallManager::operator=(BallManager & other)
-{
-	// TODO: insert return statement here
-}
 
 void BallManager::Init()
 {
+	cameraManager = cameraManager->GetInstance();
+	
+
+	float spaceHori = ballRadius + 0.001f;
+	float spaceVert = ballRadius * 2 - 0.03f;
+
 	for (size_t i = 0; i < 16; i++)
 	{
+		vector3 pos = ZERO_V3;
+
+		switch (i) {
+
+		//que ball
+		case 0:
+			pos = vector3(-2, tableHeight, 0);
+			break;
+
+		case 1:
+			pos = vector3(0, tableHeight, 0);
+			break;
+
+
+		case 2:
+			pos = vector3(spaceVert, tableHeight, -spaceHori);
+			break;
+		case 3:
+			pos = vector3(spaceVert, tableHeight, spaceHori);
+			break;
+
+			
+		case 4:
+			pos = vector3(spaceVert * 2, tableHeight, 0);
+			break;
+		case 5:
+			pos = vector3(spaceVert * 2, tableHeight, -spaceHori * 2);
+			break;
+		case 6:
+			pos = vector3(spaceVert * 2, tableHeight, spaceHori * 2);
+			break;
+
+
+		case 7:
+			pos = vector3(spaceVert * 3, tableHeight, -spaceHori);
+			break;
+		case 8:
+			pos = vector3(spaceVert * 3, tableHeight, spaceHori);
+			break;
+		case 9:
+			pos = vector3(spaceVert * 3, tableHeight, -spaceHori * 3);
+			break;
+		case 10:
+			pos = vector3(spaceVert * 3, tableHeight, spaceHori * 3);
+			break;
+
+
+		case 11:
+			pos = vector3(spaceVert * 4, tableHeight, 0);
+			break;
+		case 12:
+			pos = vector3(spaceVert * 4, tableHeight, -spaceHori * 2);
+			break;
+		case 13:
+			pos = vector3(spaceVert * 4, tableHeight, spaceHori * 2);
+			break;
+		case 14:
+			pos = vector3(spaceVert * 4, tableHeight, -spaceHori * 4);
+			break;
+		case 15:
+			pos = vector3(spaceVert * 4, tableHeight, spaceHori * 4);
+			break;
+
+
+		default:
+			pos = vector3(i, tableHeight, 0);
+			break;
+		}
+
+
 		balls[i] = new PoolBall(path);
-		balls[i]->SetPosRotScale(vector3((i/4.0f) - 1.8f, tableHeight, 0), vector3(), vector3(ballRadius));
+		balls[i]->SetPosRotScale(pos, vector3(), vector3(ballRadius));
 		balls[i]->SetID(i);
 		balls[i]->SetFriction(friction);
 	}
+
 
 	for (size_t i = 0; i < 6; i++)
 	{
@@ -52,42 +125,164 @@ void BallManager::Init()
 
 }
 
+void BallManager::ResetBalls() {
+
+	float spaceHori = ballRadius + 0.001f;
+	float spaceVert = ballRadius * 2 - 0.03f;
+
+	float rackDistance = 1.3f;
+
+	for (size_t i = 0; i < 16; i++)
+	{
+		vector3 pos = ZERO_V3;
+
+		switch (i) {
+
+			//que ball
+		case 0:
+			pos = vector3(-2, tableHeight, 0);
+			break;
+
+		case 1:
+			pos = vector3(0, tableHeight, 0);
+			break;
+
+
+		case 2:
+			pos = vector3(spaceVert, tableHeight, -spaceHori);
+			break;
+		case 3:
+			pos = vector3(spaceVert, tableHeight, spaceHori);
+			break;
+
+
+		case 4:
+			pos = vector3(spaceVert * 2, tableHeight, 0);
+			break;
+		case 5:
+			pos = vector3(spaceVert * 2, tableHeight, -spaceHori * 2);
+			break;
+		case 6:
+			pos = vector3(spaceVert * 2, tableHeight, spaceHori * 2);
+			break;
+
+
+		case 7:
+			pos = vector3(spaceVert * 3, tableHeight, -spaceHori);
+			break;
+		case 8:
+			pos = vector3(spaceVert * 3, tableHeight, spaceHori);
+			break;
+		case 9:
+			pos = vector3(spaceVert * 3, tableHeight, -spaceHori * 3);
+			break;
+		case 10:
+			pos = vector3(spaceVert * 3, tableHeight, spaceHori * 3);
+			break;
+
+
+		case 11:
+			pos = vector3(spaceVert * 4, tableHeight, 0);
+			break;
+		case 12:
+			pos = vector3(spaceVert * 4, tableHeight, -spaceHori * 2);
+			break;
+		case 13:
+			pos = vector3(spaceVert * 4, tableHeight, spaceHori * 2);
+			break;
+		case 14:
+			pos = vector3(spaceVert * 4, tableHeight, -spaceHori * 4);
+			break;
+		case 15:
+			pos = vector3(spaceVert * 4, tableHeight, spaceHori * 4);
+			break;
+
+
+		default:
+			pos = vector3(i, tableHeight, 0);
+			break;
+		}
+
+		balls[i]->SetPosRotScale(pos + vector3(rackDistance, 0, 0), vector3(), vector3(ballRadius));
+		balls[i]->SetID(i);
+		balls[i]->SetFriction(friction);
+	}
+
+	balls[0]->SetPosition(-1.1f, tableHeight, 0);
+}
+
 void BallManager::SetPath(char* p_path)
 {
 	path = p_path;
 }
 
-void BallManager::Update()
-{	
-	std::cout << "NEW FRAME ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+void BallManager::Update(float deltaTime)
+{		
+	//move camera
+	if (cameraMode == 1) {
+		cameraManager->SetPosition(cameraManager->GetPosition() + (balls[0]->GetPosition() - oldBallPos));
+		oldBallPos = balls[0]->GetPosition();
+	}
+
+	for (size_t i = 0; i < 16; i++)
+	{
+		balls[i]->PhysicsUpdate(deltaTime, gameSpeed);
+	}
 
 #pragma region WallCollision
 	for (size_t i = 0; i < 6; i++)
 	{
 		for (size_t k = 0; k < 16; k++)
 		{
+			
+			bool side = false;
 			//~~~~~~~~~~~~~~Edges~~~~~~~~~~~~~~~
 			//bottom side
-			if (balls[k]->GetPosition().x > tableColliders[i]->minX && balls[k]->GetPosition().x < tableColliders[i]->maxX && balls[k]->GetPosition().z + ballRadius > tableColliders[i]->minY) {
+			if (balls[k]->GetPosition().x > tableColliders[i]->minX && balls[k]->GetPosition().x < tableColliders[i]->maxX && balls[k]->GetPosition().z + ballRadius > tableColliders[i]->minY && balls[k]->GetPosition().z + ballRadius < tableColliders[i]->maxY) {
+				std::cout << "bottom" << std::endl;
+				balls[k]->SetPosition(balls[k]->GetPosition().x, balls[k]->GetPosition().y, tableColliders[i]->minY - ballRadius);
 				balls[k]->SetVelocity(balls[k]->GetVelocity() * vector3(1.0f, 1.0f, -1.0f));
-			}
+				side = true;
+			} 
 			//top side
-			if (balls[k]->GetPosition().x > tableColliders[i]->minX && balls[k]->GetPosition().x < tableColliders[i]->maxX && balls[k]->GetPosition().z - ballRadius < tableColliders[i]->maxY) {
+			if (balls[k]->GetPosition().x > tableColliders[i]->minX && balls[k]->GetPosition().x < tableColliders[i]->maxX && balls[k]->GetPosition().z - ballRadius < tableColliders[i]->maxY && balls[k]->GetPosition().z - ballRadius > tableColliders[i]->minY) {
+				std::cout << "top" << std::endl;
+				balls[k]->SetPosition(balls[k]->GetPosition().x, balls[k]->GetPosition().y, tableColliders[i]->maxY + ballRadius);
 				balls[k]->SetVelocity(balls[k]->GetVelocity() * vector3(1.0f, 1.0f, -1.0f));
+				side = true;
 			}
 			//left side
-			if (balls[k]->GetPosition().z > tableColliders[i]->minY && balls[k]->GetPosition().z < tableColliders[i]->maxY && balls[k]->GetPosition().x + ballRadius < tableColliders[i]->minX) {
+			if (balls[k]->GetPosition().z > tableColliders[i]->minY && balls[k]->GetPosition().z < tableColliders[i]->maxY && balls[k]->GetPosition().x + ballRadius > tableColliders[i]->minX && balls[k]->GetPosition().x + ballRadius < tableColliders[i]->maxX) {
+				std::cout << "left" << std::endl;
+				balls[k]->SetPosition(tableColliders[i]->minX - ballRadius, balls[k]->GetPosition().y, balls[k]->GetPosition().z);
 				balls[k]->SetVelocity(balls[k]->GetVelocity() * vector3(-1.0f, 1.0f, 1.0f));
+				side = true;
 			}
 			//right side
-			if (balls[k]->GetPosition().z > tableColliders[i]->minY && balls[k]->GetPosition().z < tableColliders[i]->maxY && balls[k]->GetPosition().x - ballRadius > tableColliders[i]->maxX) {
+			if (balls[k]->GetPosition().z > tableColliders[i]->minY && balls[k]->GetPosition().z < tableColliders[i]->maxY && balls[k]->GetPosition().x - ballRadius < tableColliders[i]->maxX && balls[k]->GetPosition().x - ballRadius > tableColliders[i]->minX) {
+				std::cout << "right" << std::endl;
+				balls[k]->SetPosition(tableColliders[i]->maxX + ballRadius, balls[k]->GetPosition().y, balls[k]->GetPosition().z);
 				balls[k]->SetVelocity(balls[k]->GetVelocity() * vector3(-1.0f, 1.0f, 1.0f));
+				side = true;
 			}
+
+			if (side) { continue; }
 			
+			
+
+
+
+
+
+
 			//~~~~~~~~~~~~~Corners~~~~~~~~~~~~~~
 			//Top left
 			vector3 p1 = vector3(tableColliders[i]->minX, tableHeight, tableColliders[i]->maxY);
 			if (Distance(balls[k]->GetPosition(), p1) < ballRadius) {
+				//move ball back
+				float dist = ballRadius - Distance(balls[k]->GetPosition(), p1);
+				balls[k]->SetPosition(balls[k]->GetPosition() - glm::normalize(balls[k]->GetVelocity()) * dist);
+
 				std::cout << "p1" << std::endl;
 				vector3 bisectionNormal = glm::normalize(balls[k]->GetPosition() - p1);
 				vector3 newVel = balls[k]->GetVelocity() - 2 * glm::dot(balls[k]->GetVelocity(), bisectionNormal) * bisectionNormal;
@@ -96,6 +291,10 @@ void BallManager::Update()
 			//Top right
 			vector3 p2 = vector3(tableColliders[i]->maxX, tableHeight, tableColliders[i]->maxY);
 			if (Distance(balls[k]->GetPosition(), p2) < ballRadius) {
+				//move ball back
+				float dist = ballRadius - Distance(balls[k]->GetPosition(), p2);
+				balls[k]->SetPosition(balls[k]->GetPosition() - glm::normalize(balls[k]->GetVelocity()) * dist);
+
 				std::cout << "p2" << std::endl;
 				vector3 bisectionNormal = glm::normalize(balls[k]->GetPosition() - p2);
 				vector3 newVel = balls[k]->GetVelocity() - 2 * glm::dot(balls[k]->GetVelocity(), bisectionNormal) * bisectionNormal;
@@ -104,6 +303,10 @@ void BallManager::Update()
 			//bottom left
 			vector3 p3 = vector3(tableColliders[i]->minX, tableHeight, tableColliders[i]->minY);
 			if (Distance(balls[k]->GetPosition(), p3) < ballRadius) {
+				//move ball back
+				float dist = ballRadius - Distance(balls[k]->GetPosition(), p3);
+				balls[k]->SetPosition(balls[k]->GetPosition() - glm::normalize(balls[k]->GetVelocity()) * dist);
+
 				std::cout << "p3" << std::endl;
 				vector3 bisectionNormal = glm::normalize(balls[k]->GetPosition() - p3);
 				vector3 newVel = balls[k]->GetVelocity() - 2 * glm::dot(balls[k]->GetVelocity(), bisectionNormal) * bisectionNormal;
@@ -112,6 +315,10 @@ void BallManager::Update()
 			//bottom right
 			vector3 p4 = vector3(tableColliders[i]->maxX, tableHeight, tableColliders[i]->minY);
 			if (Distance(balls[k]->GetPosition(), p4) < ballRadius) {
+				//move ball back
+				float dist = ballRadius - Distance(balls[k]->GetPosition(), p4);
+				balls[k]->SetPosition(balls[k]->GetPosition() - glm::normalize(balls[k]->GetVelocity()) * dist);
+
 				std::cout << "p4" << std::endl;
 				vector3 bisectionNormal = glm::normalize(balls[k]->GetPosition() - p4);
 				vector3 newVel = balls[k]->GetVelocity() - 2 * glm::dot(balls[k]->GetVelocity(), bisectionNormal) * bisectionNormal;
@@ -130,7 +337,7 @@ void BallManager::Update()
 	std::vector<std::vector<PoolBall*>> collisions;
 	for (size_t i = 0; i < 16; i++)
 	{
-		balls[i]->PhysicsUpdate(); ///table bounce
+		
 
 		//collision
 		for (size_t k = 0; k < 16; k++)
@@ -200,6 +407,7 @@ void BallManager::Update()
 
 #pragma endregion
 
+	
 }
 
 void BallManager::CalculateCollision(PoolBall* b1, PoolBall* b2) {
@@ -249,16 +457,28 @@ void BallManager::CalculateCollision(PoolBall* b1, PoolBall* b2) {
 
 }
 
+PoolBall* BallManager::GetCueBall()
+{
+	return balls[0];
+}
+
+void BallManager::SetGameSpeed(float n)
+{
+	gameSpeed = n;
+}
+
 void BallManager::Draw(MeshManager* mngr)
 {
-
-	mngr->AddLineToRenderList(glm::translate(balls[0]->GetPosition()) * glm::rotate(shootAngle, vector3(0, 1, 0)), ZERO_V3, vector3(0, 0, 1), C_GREEN, C_WHITE);
+	mngr->AddLineToRenderList(glm::translate(balls[0]->GetPosition()) * glm::rotate(shootAngle, vector3(0, 1, 0)), ZERO_V3, vector3(0, 0, shootVelocity), C_GREEN, C_WHITE);
 
 	for (size_t i = 0; i < 16; i++)
 	{
 		balls[i]->Draw(mngr);
 	}
 
+}
+
+void BallManager::DrawDebug(MeshManager* mngr) {
 	for (size_t i = 0; i < 6; i++)
 	{
 		tableColliders[i]->Draw(mngr);
@@ -268,12 +488,42 @@ void BallManager::Draw(MeshManager* mngr)
 
 void BallManager::ChangeAngle(float amount)
 {
-	shootAngle += amount;
+	shootAngle += amount * 0.1f;
+}
+
+void BallManager::SetAngle(float amount)
+{
+	shootAngle = amount;
+}
+
+void BallManager::ChangeShootStrength(float amount)
+{
+	shootVelocity += amount * 0.1f;
+}
+
+void BallManager::SetShootStrength(float amount)
+{
+	shootVelocity = amount;
+}
+
+float BallManager::GetShootStrength()
+{
+	return shootVelocity;
+}
+
+uint BallManager::getCameraMode()
+{
+	return cameraMode;
+}
+
+void BallManager::SetCameraMode(uint n)
+{
+	cameraMode = n;
 }
 
 void BallManager::Shoot()
 {
-	balls[0]->SetVelocity(vector3(sin(shootAngle), 0, cos(shootAngle)) * shootVelocity);
+	balls[0]->SetVelocity(vector3(sin(shootAngle), 0, cos(shootAngle)) * shootVelocity * 0.02f);
 }
 
 float BallManager::Distance(vector3 v1, vector3 v2) {

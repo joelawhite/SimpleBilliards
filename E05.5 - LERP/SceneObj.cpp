@@ -12,10 +12,6 @@ SceneObj::SceneObj(SceneObj& other)
 	
 }
 
-SceneObj& SceneObj::operator=(SceneObj& other)
-{
-
-}
 
 SceneObj::~SceneObj()
 {

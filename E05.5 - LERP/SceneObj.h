@@ -14,7 +14,6 @@ public:
 	SceneObj(const char *p_path);
 	~SceneObj();
 	SceneObj(SceneObj& other);
-	SceneObj& operator=(SceneObj& other);
 
 	void Draw();
 	void SetPosRotScale(vector3 p_position, vector3 p_rotation, vector3 p_scale);
